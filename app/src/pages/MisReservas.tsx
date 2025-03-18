@@ -91,7 +91,7 @@ export default function MisReservas() {
       }}>
          <Button variant="contained" href='/reservas/nuevo' fullWidth>Nueva reserva</Button>
          {
-            reservas.length == 0 ? <>No hay reservas</> :
+            (reservas?.length ?? 0) == 0 ? <>No hay reservas</> :
             <Stack direction="column" gap={2} width={1} marginTop={1}>
                {
                   reservas.map(reserva =>

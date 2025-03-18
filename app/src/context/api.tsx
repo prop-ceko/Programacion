@@ -233,7 +233,7 @@ export const AuthProvider = ({children} : { children: React.ReactNode }) => {
     const [auth, ] = globalAuth.useState()
 
     const data = {
-        auth,
+        auth: 'true',
         login,
         logout
     }

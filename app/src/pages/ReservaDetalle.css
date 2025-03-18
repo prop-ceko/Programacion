@@ -1,0 +1,16 @@
+#container > * {
+    flex: 0 0 45%;
+}
+
+#slider-container {
+    flex: 1 0 100%;
+}
+
+#equipamiento {
+    /* display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between; */
+    padding: 1em;
+    gap: 1em;
+    flex: 1 0 100%;
+}

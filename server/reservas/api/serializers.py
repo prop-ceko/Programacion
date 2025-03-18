@@ -1,5 +1,5 @@
 from collections import OrderedDict, Counter
-from datetime import datetime, time
+from datetime import datetime, time, date
 from typing import Iterable
 
 from django.contrib.auth.password_validation import validate_password
@@ -64,8 +64,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         return self.capitalize(value)
 
     def validate(self, attrs):
-        # here data has all the fields which have validated values
-        # so we can create a User instance out of it
         user = Usuario(**attrs)
 
         # get the password from the data
@@ -73,10 +71,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         errors = dict()
         try:
-            # validate the password and catch the exception
             validate_password(password=password, user=user)
-
-        # the exception raised here is different than serializers.ValidationError
         except exceptions.ValidationError as e:
             errors['password'] = list(e.messages)
 
@@ -89,6 +84,16 @@ class RegisterSerializer(serializers.ModelSerializer):
     def capitalize(value):
         palabras = [palabra.capitalize() for palabra in value.split(" ") if len(palabra) > 1]
         return " ".join(palabras)
+
+    def create(self, validated_data):
+        user = Usuario.objects.create_user(
+            email=validated_data['email'],
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            dni=validated_data['dni'],
+            password=validated_data['password']
+        )
+        return user
 
 
 class TokenSerializer(serializers.Serializer):
@@ -126,6 +131,7 @@ class AulaFieldSerializer(serializers.ModelSerializer):
         if "id" not in attrs and "nombre" not in attrs:
             raise serializers.ValidationError("Se requiere el id o el nombre del aula")
         return attrs
+
 
 class EstablecimientoSerializer(serializers.ModelSerializer):
     class Meta:
@@ -195,7 +201,7 @@ class ReservaSerializer(serializers.ModelSerializer):
         reserva.save()
 
         for data in validated_data.get("equipamiento"):
-            equipamiento = reserva.get_item(data["equipamiento"].id)
+            equipamiento = reserva.obtener_equipamiento(data["equipamiento"].id)
             if equipamiento is None:
                 ReservaEquipamiento.objects.create(reserva, **data)
             else:
@@ -255,7 +261,7 @@ class ReservaSerializer(serializers.ModelSerializer):
         aula = attrs["aula"]
         equipamiento = attrs.get("equipamiento")
 
-        self.validar_duracion(desde, fecha, hasta)
+        self.validar_duracion(fecha, desde, hasta)
         self.encontrar_otras_reservas(aula, desde, fecha, hasta)
         self.confirmar_disponibilidad_equipamiento(fecha, desde, hasta, equipamiento)
         return attrs
@@ -268,7 +274,7 @@ class ReservaSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     f"Solo hay {equipamiento.cantidad} {equipamiento.nombre} en toda la universidad.")
 
-            unidades_disponibles = equipamiento.disponibilidad(fecha=fecha, desde=desde, hasta=hasta)
+            unidades_disponibles = equipamiento.consultar_disponibilidad(fecha=fecha, desde=desde, hasta=hasta)
             if self.instance is not None:
                 try:
                     reserva = ReservaEquipamiento.objects.get(reserva=self.instance.id, equipamiento=equipamiento)
@@ -286,7 +292,7 @@ class ReservaSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Ya hay una reserva en ese horario")
 
     @staticmethod
-    def validar_duracion(desde, fecha, hasta):
+    def validar_duracion(fecha: date, desde: time, hasta: time):
         duracion = datetime.combine(fecha, hasta) - datetime.combine(fecha, desde)
         if duracion < RESERVA_DURACION_MINIMA:
             raise serializers.ValidationError(f"La reserva debe durar por lo menos {RESERVA_DURACION_MINIMA}")
@@ -300,3 +306,12 @@ class ReservaFieldSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reserva
         fields = ('id', 'fecha', 'desde', 'hasta', 'equipamiento')
+
+
+class ReservaExternaSerializer(serializers.Serializer):
+    nombre = serializers.CharField(required=True)
+    apellido = serializers.CharField(required=True)
+    dni = serializers.IntegerField(required=True, min_value=1)
+    email = serializers.EmailField(required=True)
+    telefono = serializers.CharField(required=True)
+    mensaje = serializers.CharField(required=True)

@@ -19,7 +19,7 @@ class ReservaAdmin(admin.ModelAdmin):
 class UsuarioAdmin(UserAdmin):
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        (_("Personal info"), {"fields": ("first_name", "last_name")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "dni")}),
         (
             _("Permissions"),
             {
@@ -40,7 +40,7 @@ class UsuarioAdmin(UserAdmin):
             _("Personal info"),
             {
                 'classes': ('wide',),
-                'fields': ('first_name', 'last_name'),
+                'fields': ('first_name', 'last_name', 'dni'),
             },
         ),
     )

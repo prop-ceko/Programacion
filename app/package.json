@@ -14,7 +14,10 @@
     "@mui/icons-material": "6.3.1",
     "@mui/material": "6.3.1",
     "@mui/x-date-pickers": "^7.23.3",
+    "@types/luxon": "^3.4.2",
     "axios": "1.7.9",
+    "formik": "^2.4.6",
+    "formik-mui": "^5.0.0-alpha.1",
     "js-cookie": "3.0.5",
     "localforage": "1.10.0",
     "luxon": "3.5.0",
@@ -25,11 +28,12 @@
     "react-hook-form-mui": "^7.4.1",
     "react-router-dom": "7.1.1",
     "state-pool": "0.10.1",
-    "vite-plugin-svgr": "4.3.0"
+    "vite-plugin-svgr": "4.3.0",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
-    "@eslint/js": "9.17.0",
     "@eslint/eslintrc": "3.2.0",
+    "@eslint/js": "9.17.0",
     "@types/react": "19.0.2",
     "@types/react-dom": "19.0.2",
     "@typescript-eslint/eslint-plugin": "8.19.0",

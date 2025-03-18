@@ -1,0 +1,125 @@
+#slider-container {
+    width: 94%;
+    /* max-width: calc(100% - 2em); */
+    margin: 1em auto;
+    position: relative;
+    padding: 0px;
+}
+
+#slider {
+    position: relative;
+    width: auto;
+    height: 20px;
+    background: #ddd;
+    /* overflow: hidden; */
+    box-sizing: border-box;
+}
+
+.unavailable {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #FF3232BB;
+    z-index: 3;
+}
+
+#selected {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #0af;
+    z-index: 1;
+}
+
+/* .ticks, .labels {
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    margin: auto;
+    text-align: center;
+} */
+
+.ticks {
+    position: relative;
+    color: #aaa;
+    font-size: 10px;
+    /* width: calc(100% - 2px); */
+    height: 10px;
+    margin: 0 1px;
+}
+
+.labels {
+    position: relative;
+    color: #000;
+    font-size: 1em;
+    /* width: calc(100% - 2px); */
+    margin: 0 1px;
+    height: 2em;
+}
+
+.tick, .label {
+    position: absolute;
+    transform: translate(-50%, 0);
+    padding: 10px 0 0;
+}
+
+.handle {
+    position: absolute;
+    width: 1px;
+    background: black;
+    /* border: 1px solid black; */
+    height: 100%;
+    /* bottom: 0; */
+    /* transform: translate(-50%, -50%); */
+    z-index: 4;
+    /* box-sizing: border-box; */
+    cursor: pointer;
+}
+
+.handle::before {
+    content: '';
+    position: absolute;
+    border-top: 10px solid black;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    box-sizing: border-box;
+    transform: translate(-45%, -100%);
+    /* left: -7px; */
+}
+
+/* #start-label, #end-label {
+    position: absolute;
+    top: 0;
+    background: linear-gradient(90deg, rgba(2,0,36,0) 0%, #ffffff 25%, #ffffff 50%, #ffffff 75%, rgba(0,212,255,0) 100%);
+    z-index: 4;
+    width: 7.2em;
+    height: 2em;
+    text-align: center;
+    transform: translate(-50%, 0);
+} */
+
+/* #start-label::before, #end-label::before {
+    content: '|';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    background: linear-gradient(90deg, rgba(2,0,36,0) 0%, #ffffff 25%, #ffffff 50%, #ffffff 75%, rgba(0,212,255,0) 100%);
+    z-index: 4;
+    color: #aaa;
+    font-size: 10px;
+    height: 10px;
+} */
+
+
+
+.label::after {
+    content: '|';
+    position: absolute;
+    width: 100%;
+    /* top: 0; */
+    transform: translate(-100%, -10px);
+    font-size: 10px;
+    text-align: center;
+    color: #aaa;
+}

@@ -65,11 +65,11 @@ export default [{
 
     rules: {
         "react/react-in-jsx-scope": "off",
-        "react/prop-types": "off",
+        "react/prop-types": "warn",
         "react/display-name": "off",
-        "no-unused-vars": "warn",
+        "no-unused-vars": "off",
         "prefer-const": "warn",
-        "@typescript-eslint/no-unused-vars": "off",
+        "@typescript-eslint/no-unused-vars": "warn",
         "@typescript-eslint/no-explicit-any": "off",
     },
 }];

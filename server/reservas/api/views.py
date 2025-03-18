@@ -44,6 +44,20 @@ class RegisterViewSet(CreateModelMixin, GenericViewSet):
     serializer_class = serializers.RegisterSerializer
 
 
+class ConfirmEmailViewSet(GenericViewSet, RetrieveModelMixin):
+    permission_classes = [AllowAny]
+    queryset = models.TokenVerificacion.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        token = self.get_object()
+        from django.core.exceptions import ValidationError
+        try:
+            token.confirm()
+        except ValidationError:
+            return Response({"result": "failed", "error": "Confirmation code expired"})
+        return Response({"result": "success"})
+
+
 class TokenViewSet(GenericViewSet):
     permission_classes = [AllowAny]
     serializer_class = serializers.TokenSerializer
@@ -111,3 +125,12 @@ class ReservaViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
         return models.Reserva.objects.filter(solicitante=user)
+
+
+# TODO: No terminado
+class ReservaExterna(viewsets.GenericViewSet, CreateModelMixin):
+    serializer_class = serializers.ReservaExternaSerializer
+
+    def create(self, request, *args, **kwargs):
+        print(request.data)
+        return super(CreateModelMixin).create(request, *args, **kwargs)
